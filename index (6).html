@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yassine Taha – Portfolio GEII</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #0a1628;
+  --bg2: #0d1f38;
+  --bg3: #112240;
+  --cyan: #00f5c4;
+  --blue: #0af;
+  --text: #e2eeff;
+  --muted: #6a85a8;
+  --border: rgba(0,245,196,0.15);
+  --glow: 0 0 20px rgba(0,245,196,0.3);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:2px;}
+#canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.4;}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:100;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(5,13,26,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--cyan);text-shadow:var(--glow);letter-spacing:2px;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--muted);text-decoration:none;letter-spacing:1px;transition:color 0.3s;}
+.nav-links a span{color:var(--cyan);}
+.nav-links a:hover{color:var(--text);}
+.nav-toggle{display:none;background:none;border:none;color:var(--cyan);font-size:1.4rem;cursor:pointer;}
+section{position:relative;z-index:1;}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:6rem 3rem 3rem;max-width:1200px;margin:0 auto;gap:4rem;}
+.hero-content{flex:1;}
+.hero-tag{font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--cyan);letter-spacing:3px;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}
+.hero-tag::before{content:'';width:40px;height:1px;background:var(--cyan);}
+h1.hero-name{font-size:clamp(3rem,7vw,5.5rem);font-weight:800;line-height:1;letter-spacing:-1px;margin-bottom:1rem;}
+h1.hero-name span{background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-typed{font-family:'Space Mono',monospace;font-size:clamp(0.9rem,2vw,1.1rem);color:var(--cyan);margin-bottom:1.5rem;min-height:2rem;font-weight:700;}
+.hero-typed .cursor{display:inline-block;width:2px;height:1.1em;background:var(--cyan);margin-left:2px;animation:blink 1s infinite;vertical-align:middle;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero-bio{font-size:1rem;color:var(--muted);max-width:500px;line-height:1.8;margin-bottom:2.5rem;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn{padding:0.85rem 2rem;font-family:'Space Mono',monospace;font-size:0.8rem;letter-spacing:1px;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;}
+.btn-primary{background:var(--cyan);color:var(--bg);border:2px solid var(--cyan);font-weight:700;}
+.btn-primary:hover{background:transparent;color:var(--cyan);box-shadow:var(--glow);}
+.btn-secondary{background:transparent;color:var(--cyan);border:2px solid var(--cyan);}
+.btn-secondary:hover{background:rgba(0,245,196,0.08);box-shadow:var(--glow);}
+.btn-cv{background:transparent;color:var(--muted);border:2px solid var(--border);}
+.btn-cv:hover{border-color:var(--cyan);color:var(--cyan);}
+.hero-img{flex:0 0 300px;display:flex;justify-content:center;}
+.hero-frame{width:270px;height:310px;position:relative;}
+.hero-frame::before,.hero-frame::after{content:'';position:absolute;border:2px solid var(--cyan);}
+.hero-frame::before{top:0;left:0;right:16px;bottom:16px;animation:glow-pulse 3s ease-in-out infinite;}
+.hero-frame::after{top:16px;left:16px;right:0;bottom:0;border-color:rgba(0,245,196,0.25);}
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 10px rgba(0,245,196,0.2);}50%{box-shadow:0 0 25px rgba(0,245,196,0.5);}}
+.hero-placeholder{position:absolute;top:0;left:0;right:16px;bottom:16px;background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:var(--muted);font-size:0.75rem;font-family:'Space Mono',monospace;text-align:center;padding:1rem;}
+.hero-placeholder i{font-size:3.5rem;color:var(--cyan);opacity:0.4;}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);letter-spacing:2px;animation:float 2s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(-8px);}}
+.hero-scroll i{color:var(--cyan);}
+
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:3.5rem;}
+.section-num{font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--cyan);font-weight:700;}
+.section-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;letter-spacing:-0.5px;}
+.section-line{flex:1;height:1px;background:var(--border);}
+
+/* ABOUT */
+#about{padding:6rem 3rem;max-width:1200px;margin:0 auto;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.about-text p{color:var(--muted);line-height:1.9;margin-bottom:1.2rem;font-size:0.95rem;}
+.about-text strong{color:var(--cyan);}
+.about-cards{display:flex;flex-direction:column;gap:1rem;}
+.info-card{background:var(--bg2);border:1px solid var(--border);padding:1.5rem;position:relative;overflow:hidden;transition:all 0.3s;}
+.info-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--cyan);}
+.info-card:hover{border-color:var(--cyan);box-shadow:var(--glow);}
+.info-card-label{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.5rem;}
+.info-card-value{font-size:1rem;font-weight:700;}
+.info-card i{color:var(--cyan);margin-right:0.5rem;}
+
+/* FORMATION */
+#formation{padding:6rem 3rem;background:var(--bg2);}
+.formation-inner{max-width:1200px;margin:0 auto;}
+.timeline{position:relative;padding-left:3rem;}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--border);}
+.timeline-item{position:relative;margin-bottom:2.5rem;opacity:0;transform:translateX(-20px);transition:all 0.6s ease;}
+.timeline-item.visible{opacity:1;transform:translateX(0);}
+.timeline-dot{position:absolute;left:-3rem;top:0.4rem;width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);transform:translateX(-4.5px);}
+.timeline-date{font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--cyan);letter-spacing:1px;margin-bottom:0.4rem;}
+.timeline-title{font-size:1.1rem;font-weight:700;margin-bottom:0.3rem;}
+.timeline-sub{font-size:0.9rem;color:var(--muted);}
+
+/* ===== COMPETENCES ===== */
+#competences{padding:6rem 3rem;max-width:1200px;margin:0 auto;}
+
+/* Tabs */
+.comp-tabs{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.comp-tab{
+  font-family:'Space Mono',monospace;font-size:0.75rem;letter-spacing:1px;
+  padding:0.6rem 1.4rem;border:1px solid var(--border);
+  background:transparent;color:var(--muted);cursor:pointer;transition:all 0.3s;
+}
+.comp-tab:hover{border-color:var(--cyan);color:var(--cyan);}
+.comp-tab.active{background:var(--cyan);color:var(--bg);border-color:var(--cyan);font-weight:700;}
+
+/* Comp panels */
+.comp-panel{display:none;}
+.comp-panel.active{display:block;}
+
+.comp-card-full{
+  background:var(--bg2);border:1px solid var(--border);
+  padding:2.5rem;position:relative;overflow:hidden;
+}
+.comp-card-full::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--blue));}
+
+.comp-header{display:flex;align-items:flex-start;gap:2rem;margin-bottom:2rem;flex-wrap:wrap;}
+.comp-icon-big{font-size:3rem;flex-shrink:0;}
+.comp-header-text{}
+.comp-ref-title{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.4rem;}
+.comp-name{font-size:1.4rem;font-weight:800;margin-bottom:0.4rem;}
+.comp-level{display:inline-block;font-family:'Space Mono',monospace;font-size:0.7rem;background:rgba(0,245,196,0.1);border:1px solid var(--border);color:var(--cyan);padding:0.25rem 0.8rem;letter-spacing:1px;}
+
+/* Auto-eval */
+.auteval-title{
+  font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--cyan);
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:1.5rem;padding-bottom:0.8rem;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:0.8rem;
+}
+.auteval-title i{font-size:1rem;}
+
+.auteval-item{
+  background:var(--bg3);border:1px solid var(--border);
+  padding:1.5rem;margin-bottom:1rem;
+  transition:border-color 0.3s;
+}
+.auteval-item:hover{border-color:rgba(0,245,196,0.3);}
+
+.auteval-criterion{display:grid;grid-template-columns:1fr auto;align-items:start;gap:1rem;margin-bottom:0.8rem;}
+.auteval-check{display:flex;align-items:flex-start;gap:0.6rem;flex:1;}
+.auteval-check i{color:var(--cyan);margin-top:3px;flex-shrink:0;}
+.auteval-criterion-text{font-size:0.9rem;font-weight:600;}
+
+/* Rating dots */
+.rating-dots{display:flex;gap:0.4rem;align-items:center;padding-top:3px;flex-shrink:0;}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px rgba(0,245,196,0.5);}
+.dot.empty{background:transparent;border:2px solid var(--muted);}
+
+.auteval-justif{
+  font-size:0.83rem;color:var(--muted);line-height:1.7;
+  padding-left:1.5rem;border-left:2px solid var(--border);
+  font-style:italic;
+}
+.auteval-justif strong{color:var(--text);font-style:normal;}
+
+/* PROJECTS */
+#projets{padding:6rem 3rem;background:var(--bg2);}
+.projects-inner{max-width:1200px;margin:0 auto;}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5rem;}
+
+.project-card{
+  background:var(--bg3);border:1px solid var(--border);
+  overflow:hidden;transition:all 0.4s;
+  opacity:0;transform:translateY(30px);
+  display:flex;flex-direction:column;
+}
+.project-card.visible{opacity:1;transform:translateY(0);}
+.project-card:hover{border-color:var(--cyan);box-shadow:var(--glow);}
+
+/* Project image */
+.project-img-wrap{
+  width:100%;height:180px;position:relative;
+  background:var(--bg2);overflow:hidden;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.project-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s;}
+.project-card:hover .project-img{transform:scale(1.05);}
+.project-img-placeholder{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0.5rem;
+  color:var(--muted);font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:1px;
+  background:var(--bg2);
+}
+.project-img-placeholder i{font-size:2.5rem;color:var(--cyan);opacity:0.25;}
+
+.project-body{padding:1.8rem;display:flex;flex-direction:column;flex:1;}
+.project-num{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);letter-spacing:2px;margin-bottom:0.6rem;}
+.project-title{font-size:1.15rem;font-weight:700;margin-bottom:0.7rem;}
+.project-desc{font-size:0.87rem;color:var(--muted);line-height:1.8;margin-bottom:1rem;flex:1;}
+
+.project-comps-label{font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--cyan);letter-spacing:1px;margin-bottom:0.5rem;text-transform:uppercase;}
+.project-comps-list{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem;}
+.comp-badge{font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--cyan);background:rgba(0,245,196,0.07);border:1px solid rgba(0,245,196,0.2);padding:0.2rem 0.6rem;}
+
+.project-tags{display:flex;flex-wrap:wrap;gap:0.4rem;}
+.tag{font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--muted);border:1px solid var(--border);padding:0.2rem 0.55rem;}
+
+/* CV */
+#cv{padding:5rem 3rem;max-width:1200px;margin:0 auto;}
+.cv-box{background:var(--bg2);border:1px solid var(--border);padding:3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;transition:border-color 0.3s;}
+.cv-box:hover{border-color:var(--cyan);box-shadow:var(--glow);}
+.cv-text h3{font-size:1.4rem;font-weight:700;margin-bottom:0.5rem;}
+.cv-text p{color:var(--muted);font-size:0.9rem;}
+.cv-icon{font-size:3rem;color:var(--cyan);opacity:0.4;}
+
+/* CONTACT */
+#contact{padding:6rem 3rem;background:var(--bg2);}
+.contact-inner{max-width:800px;margin:0 auto;text-align:center;}
+.contact-subtitle{color:var(--muted);font-size:1rem;line-height:1.8;margin-bottom:3rem;}
+.contact-links{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:3rem;}
+.contact-link{display:flex;align-items:center;gap:0.8rem;font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:0.8rem 1.4rem;transition:all 0.3s;}
+.contact-link:hover{color:var(--cyan);border-color:var(--cyan);box-shadow:var(--glow);}
+.contact-link i{color:var(--cyan);}
+.contact-form{display:flex;flex-direction:column;gap:1rem;text-align:left;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-group{display:flex;flex-direction:column;gap:0.4rem;}
+.form-group label{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;}
+.form-group input,.form-group textarea{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:0.8rem 1rem;font-family:'Syne',sans-serif;font-size:0.9rem;transition:border-color 0.3s;outline:none;resize:none;}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--cyan);}
+.form-group textarea{min-height:120px;}
+.btn-submit{align-self:flex-end;background:var(--cyan);color:var(--bg);border:2px solid var(--cyan);padding:0.85rem 2.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all 0.3s;}
+.btn-submit:hover{background:transparent;color:var(--cyan);}
+
+footer{text-align:center;padding:2rem;font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--muted);border-top:1px solid var(--border);position:relative;z-index:1;}
+footer span{color:var(--cyan);}
+
+.fade-in{opacity:0;transform:translateY(20px);transition:all 0.7s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links{display:none;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:rgba(5,13,26,0.97);padding:2rem;gap:1.5rem;border-bottom:1px solid var(--border);}
+  .nav-links.open{display:flex;}
+  .nav-toggle{display:block;}
+  #hero{flex-direction:column;text-align:center;padding:6rem 1.5rem 3rem;gap:2rem;}
+  .hero-tag{justify-content:center;}
+  .hero-bio{margin:0 auto 2.5rem;}
+  .hero-btns{justify-content:center;}
+  .about-grid{grid-template-columns:1fr;}
+  #about,#competences,#cv{padding:4rem 1.5rem;}
+  #formation,#projets,#contact{padding:4rem 1.5rem;}
+  .form-row{grid-template-columns:1fr;}
+  .cv-box{flex-direction:column;text-align:center;}
+  .comp-header{flex-direction:column;gap:1rem;}
+}
+
+/* AUTEVAL IMAGE */
+.auteval-img-wrap{
+  margin-top:1rem;width:100%;max-width:500px;
+  position:relative;border:1px solid var(--border);
+  background:var(--bg2);overflow:hidden;
+}
+.auteval-img{width:100%;display:block;transition:transform 0.3s;}
+.auteval-img:hover{transform:scale(1.02);}
+.auteval-img-placeholder{
+  padding:2rem;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0.5rem;
+  color:var(--muted);font-family:'Space Mono',monospace;
+  font-size:0.72rem;letter-spacing:1px;text-align:center;
+}
+.auteval-img-placeholder i{font-size:2rem;color:var(--cyan);opacity:0.3;}
+
+
+/* TIMELINE LOGO */
+.timeline-content-row{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:1.5rem;
+}
+.timeline-logo-wrap{
+  flex-shrink:0;width:90px;height:70px;
+  display:flex;align-items:center;justify-content:center;
+  background:white;border-radius:6px;padding:8px;
+  border:1px solid var(--border);
+}
+.timeline-logo{
+  max-width:100%;max-height:100%;
+  object-fit:contain;display:block;
+}
+.timeline-logo-placeholder{
+  display:flex;flex-direction:column;align-items:center;
+  gap:0.3rem;color:var(--muted);font-family:'Space Mono',monospace;
+  font-size:0.6rem;text-align:center;letter-spacing:0.5px;
+}
+.timeline-logo-placeholder i{font-size:1.4rem;color:var(--cyan);opacity:0.4;}
+
+
+/* LOGICIELS LABEL */
+.project-logiciels-label{font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--cyan);letter-spacing:1px;margin-bottom:0.5rem;text-transform:uppercase;margin-top:0.8rem;}
+.project-logiciels-list{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem;}
+.logiciel-badge{font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--blue);background:rgba(0,170,255,0.07);border:1px solid rgba(0,170,255,0.25);padding:0.2rem 0.6rem;}
+
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">YT.</div>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+  <ul class="nav-links">
+    <li><a href="#about"><span>01.</span> À propos</a></li>
+    <li><a href="#formation"><span>02.</span> Formation</a></li>
+    <li><a href="#competences"><span>03.</span> Compétences</a></li>
+    <li><a href="#projets"><span>04.</span> Projets</a></li>
+    <li><a href="#cv"><span>05.</span> CV</a></li>
+    <li><a href="#contact"><span>06.</span> Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Bonjour, je suis</div>
+    <h1 class="hero-name">Yassine Taha</h1>
+    <div class="hero-typed"><span id="typed-text"></span><span class="cursor"></span></div>
+    <p class="hero-bio">Étudiant en BUT Génie Électrique et Informatique Industrielle à l'IUT de Rennes. Je conçois des systèmes électroniques, programme des cartes embarquées et modélise des installations électriques industrielles.</p>
+    <div class="hero-btns">
+      <a href="#projets" class="btn btn-primary"><i class="fas fa-microchip"></i> Mes Projets</a>
+      <a href="#contact" class="btn btn-secondary"><i class="fas fa-paper-plane"></i> Me Contacter</a>
+      <a href="CV_YASSINE_TAHA.pdf" download class="btn btn-cv"><i class="fas fa-file-pdf"></i> Mon CV</a>
+    </div>
+  </div>
+  <div class="hero-img">
+    <div class="hero-frame">
+      <div class="hero-placeholder">
+        <i class="fas fa-user-circle"></i>
+        <span>Ajoute ta photo ici</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>Scroll</span><i class="fas fa-chevron-down"></i></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header fade-in">
+    <span class="section-num">01.</span>
+    <h2 class="section-title">À propos de moi</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text fade-in">
+      <p>Je suis étudiant passionné par l'<strong>électronique</strong>, l'<strong>électrotechnique</strong> et les <strong>systèmes embarqués</strong>. Mon parcours académique m'a permis de développer des compétences allant de la conception de circuits à la programmation de cartes embarquées.</p>
+      <p>J'ai obtenu mon <strong>Baccalauréat Physique-Chimie</strong> au Maroc avant d'intégrer le <strong>BUT GEII à l'IUT de Rennes</strong>, où je mets en pratique des compétences en électronique de puissance, automatisme, CAO et instrumentation.</p>
+      <p>Futur alternant chez <strong>SPIE CityNetworks</strong> en tant que <strong>Technicien Bureau d'Études à Nantes</strong>, où je vais mettre en pratique mes compétences techniques dans le domaine de l'énergie et des installations électriques.</p>
+    </div>
+    <div class="about-cards fade-in">
+      <div class="info-card">
+        <div class="info-card-label">Formation actuelle</div>
+        <div class="info-card-value"><i class="fas fa-graduation-cap"></i>BUT GEII – IUT de Rennes</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Spécialisation</div>
+        <div class="info-card-value"><i class="fas fa-bolt"></i>Génie Électrique et Informatique Industrielle</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMATION -->
+<section id="formation">
+  <div class="formation-inner">
+    <div class="section-header fade-in">
+      <span class="section-num">02.</span>
+      <h2 class="section-title">Formation</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content-row">
+          <div>
+            <div class="timeline-date">Depuis septembre 2025</div>
+            <div class="timeline-title">Bachelor Universitaire de Technologie – GEII</div>
+            <div class="timeline-sub">IUT de Rennes, Rennes, France</div>
+          </div>
+          <div class="timeline-logo-wrap">
+            <img src="images/logo_iut_rennes.png" alt="IUT Rennes" class="timeline-logo" onerror="this.style.display='none'">
+            <div class="timeline-logo-placeholder"><i class="fas fa-university"></i><span>logo_iut_rennes.png</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2025</div>
+        <div class="timeline-title">Baccalauréat – Physique Chimie</div>
+        <div class="timeline-sub">Lycée Qualifiant Oued Eddahab, Casablanca, Maroc</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETENCES -->
+<section id="competences">
+  <div class="section-header fade-in">
+    <span class="section-num">03.</span>
+    <h2 class="section-title">Compétences GEII – BUT1</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="comp-tabs fade-in">
+    <button class="comp-tab active" onclick="showComp('c1',this)">⚙️ Concevoir</button>
+    <button class="comp-tab" onclick="showComp('c2',this)">🔬 Vérifier</button>
+    
+    
+  </div>
+
+  <!-- C1 : CONCEVOIR -->
+  <div class="comp-panel active" id="panel-c1">
+    <div class="comp-card-full fade-in">
+      <div class="comp-header">
+        <span class="comp-icon-big">⚙️</span>
+        <div class="comp-header-text">
+          <div class="comp-ref-title">Référentiel de compétence – C1</div>
+          <div class="comp-name">Concevoir la partie GEII d'un système industriel</div>
+          <span class="comp-level">BUT1 – NOVICE</span>
+        </div>
+      </div>
+      <div class="auteval-title"><i class="fas fa-chart-bar"></i> Auto-évaluation – Fin BUT1</div>
+
+      <div class="auteval-item">
+        <div class="auteval-criterion">
+          <div class="auteval-check"><i class="fas fa-check-circle"></i><span class="auteval-criterion-text">Je suis capable de produire une analyse fonctionnelle d'un système simple</span></div>
+          <div class="rating-dots"><div class="dot"></div><div class="dot"></div><div class="dot empty"></div><div class="dot empty"></div><div class="dot empty"></div></div>
+        </div>
+        <div class="auteval-justif">Dans le projet <strong>Console de jeux rétrogaming</strong>, j'ai été amené à analyser le système complet : identifier les entrées (joystick, boutons), les sorties (écran TFT, haut-parleur) et les fonctions de traitement. J'ai produit un schéma fonctionnel complet de la console avant la conception du PCB.</div>
+      </div>
+
+      <div class="auteval-item">
+        <div class="auteval-criterion">
+          <div class="auteval-check"><i class="fas fa-check-circle"></i><span class="auteval-criterion-text">Je suis capable de dimensionner des composants électroniques</span></div>
+          <div class="rating-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot empty"></div></div>
+        </div>
+        <div class="auteval-justif">Dans le projet <strong>Variateur de lumière</strong>, j'ai dimensionné les composants actifs et passifs du gradateur. J'ai calculé les valeurs des résistances et condensateurs en fonction des contraintes du cahier des charges.</div>
+      </div>
+
+      <div class="auteval-item">
+        <div class="auteval-criterion">
+          <div class="auteval-check"><i class="fas fa-check-circle"></i><span class="auteval-criterion-text">Je suis capable de réaliser des schémas électriques sous logiciel CAO</span></div>
+          <div class="rating-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        </div>
+        <div class="auteval-justif">Dans le projet <strong>Borne IRVE</strong>, j'ai réalisé la modélisation multifilaire complète sous <strong>QElectroTech</strong> (3 folios) et la saisie des schémas structurels sous <strong>Proteus</strong>, incluant la partie puissance et commande de la borne EVLink.</div>
+        <div class="auteval-img-wrap">
+          <img src="images/schema_cao.jpg" alt="Schéma CAO QElectroTech" class="auteval-img" onerror="this.style.display='none'">
+          <div class="auteval-img-placeholder"><i class="fas fa-image"></i><span>Ajoute ton schéma ici → images/schema_cao.jpg</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      <!-- C2 : VERIFIER -->
+  <div class="comp-panel" id="panel-c2">
+    <div class="comp-card-full fade-in">
+      <div class="comp-header">
+        <span class="comp-icon-big">🔬</span>
+        <div class="comp-header-text">
+          <div class="comp-ref-title">Référentiel de compétence – C2</div>
+          <div class="comp-name">Vérifier la partie GEII d'un système industriel</div>
+          <span class="comp-level">BUT1 – NOVICE</span>
+        </div>
+      </div>
+      <div class="auteval-title"><i class="fas fa-chart-bar"></i> Auto-évaluation – Fin BUT1</div>
+
+      <div class="auteval-item">
+        <div class="auteval-criterion">
+          <div class="auteval-check"><i class="fas fa-check-circle"></i><span class="auteval-criterion-text">Je suis capable de réaliser une campagne de mesures</span></div>
+          <div class="rating-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot empty"></div></div>
+        </div>
+        <div class="auteval-justif">Dans le projet <strong>Borne IRVE</strong>, j'ai réalisé une campagne de mesures complète : mesure du courant de charge à l'oscilloscope, vérification de la chaîne d'acquisition ACS712 et analyse des signaux PWM Control Pilot. J'ai également utilisé l'oscilloscope, le multimètre et le GBF dans les projets <strong>Console rétrogaming</strong> et <strong>Variateur de lumière</strong>.</div>
+      </div>
+
+      <div class="auteval-item">
+        <div class="auteval-criterion">
+          <div class="auteval-check"><i class="fas fa-check-circle"></i><span class="auteval-criterion-text">Je suis capable de vérifier la conformité d'une installation aux normes</span></div>
+          <div class="rating-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot empty"></div><div class="dot empty"></div></div>
+        </div>
+        <div class="auteval-justif">Dans le projet <strong>Borne IRVE</strong>, j'ai appliqué et vérifié la conformité à la norme <strong>NF C 15-100</strong> pour les installations électriques, en particulier pour le dimensionnement et la protection du circuit de charge.</div>
+      </div>
+
+      <div class="auteval-item">
+        <div class="auteval-criterion">
+          <div class="auteval-check"><i class="fas fa-check-circle"></i><span class="auteval-criterion-text">Je suis capable d'identifier un dysfonctionnement</span></div>
+          <div class="rating-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot empty"></div><div class="dot empty"></div></div>
+        </div>
+        <div class="auteval-justif">Dans le projet <strong>Console rétrogaming</strong>, lors des tests, j'ai identifié plusieurs dysfonctionnements sur la carte PCB : composants mal brasés, problème d'alimentation du Raspberry Pi Pico et signal d'affichage TFT incorrect. J'ai utilisé le multimètre et l'oscilloscope pour localiser les pannes.</div>
+      </div>
+
+      <div class="auteval-item">
+        <div class="auteval-criterion">
+          <div class="auteval-check"><i class="fas fa-check-circle"></i><span class="auteval-criterion-text">Je suis capable de décrire les effets d'un dysfonctionnement</span></div>
+          <div class="rating-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot empty"></div><div class="dot empty"></div></div>
+        </div>
+        <div class="auteval-justif">Dans le projet <strong>Console rétrogaming</strong>, j'ai décrit les effets des dysfonctionnements identifiés : un composant mal brasé provoquait une absence d'alimentation, ce qui empêchait le démarrage du jeu. La correction du signal TFT a permis de rétablir l'affichage complet de l'interface.</div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- PROJECTS -->
+<section id="projets">
+  <div class="projects-inner">
+    <div class="section-header fade-in">
+      <span class="section-num">04.</span>
+      <h2 class="section-title">Projets SAÉ – BUT1</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid">
+      <!-- Projet 1 : Variateur -->
+      <div class="project-card">
+        <div class="project-img-wrap">
+          <img src="images/gradateur.jpg" alt="Variateur de Puissance" class="project-img" onerror="this.style.display='none'">
+          <div class="project-img-placeholder"><i class="fas fa-lightbulb"></i><span>gradateur.jpg</span></div>
+        </div>
+        <div class="project-body">
+          <div class="project-num">Premier projet académique – BUT1</div>
+          <h3 class="project-title">Variateur de Puissance</h3>
+          <p class="project-desc">Conception logicielle et matérielle d'un système de modulation d'énergie (gradateur de lumière). Dimensionnement des composants, création de schémas électroniques, conception PCB et campagne de mesure complète.</p>
+          <div class="project-comps-label">Compétences mobilisées</div>
+          <div class="project-comps-list">
+            <span class="comp-badge">⚙️ Concevoir</span>
+            <span class="comp-badge">🔬 Vérifier</span>
+            <span class="comp-badge">💻 Implanter</span>
+          </div>
+          <div class="project-logiciels-label">Logiciels utilisés</div>
+          <div class="project-logiciels-list">
+            <span class="logiciel-badge">Proteus</span>
+            
+          </div>
+          <div class="project-tags">
+            <span class="tag">Électronique de puissance</span><span class="tag">CAO</span><span class="tag">PCB</span><span class="tag">Mesures</span>
+          </div>
+        </div>
+      </div>
+      <!-- Projet 2 : Borne IRVE -->
+      <div class="project-card">
+        <div class="project-img-wrap">
+          <img src="images/borne.jpg" alt="Borne IRVE" class="project-img" onerror="this.style.display='none'">
+          <div class="project-img-placeholder"><i class="fas fa-charging-station"></i><span>borne.jpg</span></div>
+        </div>
+        <div class="project-body">
+          <div class="project-num">Deuxième projet académique – BUT1</div>
+          <h3 class="project-title">Borne de Recharge IRVE</h3>
+          <p class="project-desc">Étude, modélisation multifilaire et réalisation d'une borne de charge pour véhicule électrique EVLink. Conception PCB, câblage puissance/commande, signal PWM Control Pilot, mesure de courant via ACS712, norme NF C 15-100.</p>
+          <div class="project-comps-label">Compétences mobilisées</div>
+          <div class="project-comps-list">
+            <span class="comp-badge">⚙️ Concevoir</span>
+            <span class="comp-badge">🔬 Vérifier</span>
+            <span class="comp-badge">🛠️ Maintenir</span>
+            <span class="comp-badge">💻 Implanter</span>
+          </div>
+          <div class="project-logiciels-label">Logiciels utilisés</div>
+          <div class="project-logiciels-list">
+            <span class="logiciel-badge">QElectroTech</span>
+            <span class="logiciel-badge">Proteus</span>
+          </div>
+          <div class="project-tags">
+            <span class="tag">QElectroTech</span><span class="tag">Proteus</span><span class="tag">PWM / IRVE</span><span class="tag">NF C 15-100</span><span class="tag">RPi Pico</span>
+          </div>
+        </div>
+      </div>
+      <!-- Projet 3 : Console -->
+      <div class="project-card">
+        <div class="project-img-wrap">
+          <img src="images/console.jpg" alt="Console Rétrogaming" class="project-img" onerror="this.style.display='none'">
+          <div class="project-img-placeholder"><i class="fas fa-gamepad"></i><span>console.jpg</span></div>
+        </div>
+        <div class="project-body">
+          <div class="project-num">Troisième projet académique – BUT1</div>
+          <h3 class="project-title">Console de Rétrogaming</h3>
+          <p class="project-desc">Conception et réalisation complète d'une console portable embarquant deux jeux (Simon et Gunfight). Schéma électrique, routage PCB sous Proteus, brasage CMS, programmation Python avec écran TFT 1,8'', joystick et haut-parleur.</p>
+          <div class="project-comps-label">Compétences mobilisées</div>
+          <div class="project-comps-list">
+            <span class="comp-badge">⚙️ Concevoir</span>
+            <span class="comp-badge">🔬 Vérifier</span>
+            <span class="comp-badge">💻 Implanter</span>
+          </div>
+          <div class="project-logiciels-label">Logiciels utilisés</div>
+          <div class="project-logiciels-list">
+            <span class="logiciel-badge">Proteus</span>
+            <span class="logiciel-badge">Python</span>
+            <span class="logiciel-badge">Thonny</span>
+          </div>
+          <div class="project-tags">
+            <span class="tag">Raspberry Pi Pico</span><span class="tag">Python</span><span class="tag">PCB Proteus</span><span class="tag">Brasage CMS</span><span class="tag">Écran TFT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CV -->
+<section id="cv">
+  <div class="section-header fade-in">
+    <span class="section-num">05.</span>
+    <h2 class="section-title">Mon CV</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="cv-box fade-in">
+    <i class="fas fa-file-pdf cv-icon"></i>
+    <div class="cv-text">
+      <h3>Télécharger mon CV</h3>
+      
+    </div>
+    <a href="CV_YASSINE_TAHA.pdf" download class="btn btn-primary"><i class="fas fa-download"></i> Télécharger le CV</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-header fade-in" style="justify-content:center;">
+      <span class="section-num">06.</span>
+      <h2 class="section-title">Contact</h2>
+      <div class="section-line"></div>
+    </div>
+    <p class="contact-subtitle fade-in">Vous souhaitez discuter d'un projet, d'une opportunité de stage ou simplement échanger ? N'hésitez pas à me contacter. Je suis toujours ouvert aux nouvelles collaborations et défis techniques !</p>
+    <div class="contact-links fade-in">
+      <a href="mailto:tyassine410@gmail.com" class="contact-link"><i class="fas fa-envelope"></i>tyassine410@gmail.com</a>
+      <a href="https://linkedin.com/in/yassine-taha" target="_blank" class="contact-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
+      <a href="tel:+33632769812" class="contact-link"><i class="fas fa-phone"></i>+33 6 32 76 98 12</a>
+    </div>
+    
+  </div>
+</section>
+
+<footer>
+  <p>Conçu & développé par <span>Yassine Taha</span> · BUT GEII – IUT de Rennes</p>
+</footer>
+
+<script>
+// CANVAS
+const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+const pts=Array.from({length:60},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5,a:Math.random()*.5+.2}));
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0;if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(0,245,196,${p.a})`;ctx.fill();});pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(0,245,196,${.15*(1-d/120)})`;ctx.lineWidth=.5;ctx.stroke();}}));requestAnimationFrame(draw);}
+draw();
+
+// TYPING
+const phrases=['Étudiant en BUT GEII','Génie Électrique & Informatique Industrielle','Conception PCB & Systèmes Embarqués','Futur Alternant GEII'];
+let pi=0,ci=0,del=false;
+const el=document.getElementById('typed-text');
+function type(){const cur=phrases[pi];if(!del){el.textContent=cur.slice(0,++ci);if(ci===cur.length){del=true;setTimeout(type,1800);return;}}else{el.textContent=cur.slice(0,--ci);if(ci===0){del=false;pi=(pi+1)%phrases.length;}}setTimeout(type,del?50:80);}
+type();
+
+// SCROLL ANIMATIONS
+const obs=new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.1});
+document.querySelectorAll('.fade-in,.timeline-item,.project-card').forEach(el=>obs.observe(el));
+
+// COMP TABS
+function showComp(id, btn) {
+  document.querySelectorAll('.comp-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.comp-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
